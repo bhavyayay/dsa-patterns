@@ -2,8 +2,8 @@ class Solution {
 public:
     int sortableIntegers(vector<int>& nums) {
         int n = nums.size();
-        vector<int> sorted = nums;
-        sort(sorted.begin(), sorted.end());
+        vector<int> s = nums;
+        sort(s.begin(), s.end());
 
         int ans = 0;
 
@@ -12,19 +12,28 @@ public:
 
             bool ok = true;
 
-            for (int i = 0; i < n; i += k) {
+            for (int i = 0; i < n && ok; i += k) {
                 vector<int> a(nums.begin() + i, nums.begin() + i + k);
-                vector<int> b(sorted.begin() + i, sorted.begin() + i + k);
+                vector<int> b(s.begin() + i, s.begin() + i + k);
 
-                // Check if a is a rotation of b
-                vector<int> doubled = b;
-                doubled.insert(doubled.end(), b.begin(), b.end());
+                bool found = false;
+                for (int j = 0; j < k; j++) {
+                    bool same = true;
 
-                if (search(doubled.begin(), doubled.end(),
-                           a.begin(), a.end()) == doubled.end()) {
-                    ok = false;
-                    break;
+                    for (int t = 0; t < k; t++) {
+                        if (a[t] != b[(j + t) % k]) {
+                            same = false;
+                            break;
+                        }
+                    }
+
+                    if (same) {
+                        found = true;
+                        break;
+                    }
                 }
+
+                if (!found) ok = false;
             }
 
             if (ok) ans += k;
