@@ -16,7 +16,7 @@ public:
         ancestorTable[node][0] = parent;
 
         tin[node] = time;
-        eulerTour[time] = (1 << (s[node] - 'a')); //"a" = 001, "b" = 0101 : Entering
+        eulerTour[time] = (1 << (s[node] - 'a')); 
         time++;
 
         for(int &child : adj[node]) {
@@ -27,11 +27,10 @@ public:
         }
 
         tout[node] = time;
-        eulerTour[time] = (1 << (s[node] - 'a')); //Leaving
+        eulerTour[time] = (1 << (s[node] - 'a')); 
         time++;
     }
 
-    // Segment Tree : Build (For XOR)
     void buildSegmentTree(int i, int l, int r, vector<int>& nums) {
         if(l == r) {
             segmentTree[i] = nums[l];
@@ -44,7 +43,6 @@ public:
         segmentTree[i] = segmentTree[2*i+1] ^ segmentTree[2*i+2];
     }
 
-    //Segment Tree : Point update (Xor)
     void updateSegTree(int index, int val, int i, int l, int r) {
         if(l == r) {
             segmentTree[i] = val;
@@ -61,7 +59,6 @@ public:
         segmentTree[i] = segmentTree[2*i+1] ^ segmentTree[2*i+2];
     }
 
-    //Segment Tree : Search Query (Xor)
     int querySegmentTree(int start, int end, int i, int l, int r) {
         if(l > end || r < start) {
             return 0;
@@ -76,7 +73,6 @@ public:
                querySegmentTree(start, end, 2*i+2, mid+1, r);
     }
 
-    // Binary Lifting Code for building ancestorTable
     void buildAncestorTable() {
         for(int j = 1; j < cols; j++) {
             for(int node = 0; node < n; node++) {
@@ -87,7 +83,6 @@ public:
         }
     }
 
-    //get LCA using Binary Lifting
     int getLCA(int u, int v) {
         if(depth[u] < depth[v]) swap(u, v);
 
@@ -124,9 +119,8 @@ public:
         tin.assign(n, 0);
         tout.assign(n, 0);
         depth.assign(n, 0);
-        eulerTour.assign(2*n, 0); //Sees each node at inTime and outTime
+        eulerTour.assign(2*n, 0); 
 
-        //root = 0
         time = 0;
         cols = log2(n) + 1;
         ancestorTable.assign(n, vector<int>(cols, -1));
@@ -134,8 +128,7 @@ public:
         dfs(0, -1, 0, s);
 
 
-        //Build Segment Tree for the array - eulerTour -> size = 2*n
-        int N = 2*n; //size of eulerTour array
+        int N = 2*n; 
         segmentTree.resize(4*N, 0);
         buildSegmentTree(0, 0, N-1, eulerTour);
         
@@ -148,7 +141,7 @@ public:
             string type;
             ss >> type;
 
-            if(type == "update") { //update ui c
+            if(type == "update") {
                 int node;
                 char c;
 
@@ -158,7 +151,7 @@ public:
                 s[node] = c;
                 updateSegTree(tin[node], charValue, 0, 0, 2*n-1);
                 updateSegTree(tout[node], charValue, 0, 0, 2*n-1);
-            } else { //query ui vi
+            } else { 
                 int u, v;
 
                 ss >> u >> v;
