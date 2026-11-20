@@ -19,16 +19,14 @@ public:
             return memo[i][inc];
         }
 
-        int currVal = nums[i] + inc; //inc = 0/1
+        int currVal = nums[i] + inc; 
         int len = 1;
 
-        //1st Option = find (currVal+1)
         int j = findMethod(nums, i+1, currVal+1);
         if(j != -1) {
             len = max(len, 1 + solve(j, 0, nums));
         }
 
-        //2nd Option = find (currVal) and then inc by +1
         j = findMethod(nums, i+1, currVal);
         if(j != -1) {
             len = max(len, 1 + solve(j, 1, nums));
